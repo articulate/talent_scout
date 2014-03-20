@@ -38,19 +38,9 @@ module TalentScout
     end
 
     def facet(name)
-      response.response['facets'][name]['terms'].map do |term|
-        { term['term'] => term['count'] }
+      response.response['facets'][name]['terms'].each_with_object({}) do |item, hash|
+        hash[item['term']] = item['count']
       end
-    end
-
-    def type_count type
-      facet('type').detect do |t|
-        t[type]
-      end.try(:[], type) || 0
-    end
-
-    def tag_count
-      facet('tag')
     end
 
     def formatted_query

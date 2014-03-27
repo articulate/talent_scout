@@ -1,5 +1,8 @@
 RSpec.configure do |config|
   config.before :each do
-    Elasticsearch::Model.client.indices.delete
+    [Book, Music, Video].each do |klass|
+      klass.__elasticsearch__.create_index! force: true
+      klass.__elasticsearch__.refresh_index!
+    end
   end
 end

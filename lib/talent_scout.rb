@@ -15,3 +15,5 @@ module TalentScout
     Response.new(models, search)
   end
 end
+
+Elasticsearch::Model.client = Elasticsearch::Client.new url: ENV['BOXEN_ELASTICSEARCH_URL'] || 'http://localhost:9200'

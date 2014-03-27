@@ -7,9 +7,5 @@ module TalentScout
     def ancestors
       []
     end
-
-   # def default_per_page
-   #   20
-   # end
   end
 end

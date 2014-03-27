@@ -6,6 +6,10 @@ describe TalentScout do
     let!(:video) { create(:video, title: "Adventure Adventure Adventure") }
     let!(:book) { create(:book) }
 
+    before do
+      Elasticsearch::Model.client.indices.refresh
+    end
+
     it 'returns records from multiple models' do
       response = TalentScout.search [Video, Music, Book], { query: { query_string: { query: "Adventure", default_operator: 'AND' } } }
       expect(response.records).to include book
@@ -22,4 +26,3 @@ describe TalentScout do
     end
   end
 end
-

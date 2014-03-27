@@ -1,9 +1,9 @@
 require 'elasticsearch/model'
 
 module TalentScout
-  autoload :Search, "talent_scout/search"
   autoload :Response, "talent_scout/response"
   autoload :MultipleModels, "talent_scout/multiple_models"
+  autoload :VERSION, "talent_scout/version"
 
   def self.search(models=[], query={}, options={})
     models = MultipleModels.new(models)
@@ -15,5 +15,3 @@ module TalentScout
     Response.new(models, search)
   end
 end
-
-Elasticsearch::Model.client = Elasticsearch::Client.new url: ENV['BOXEN_ELASTICSEARCH_URL'] || 'http://localhost:9200'

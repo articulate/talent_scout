@@ -15,7 +15,7 @@ module TalentScout
       hits = response['hits']['hits']
       found_records.sort_by do |record|
         hits.index do |hit|
-          hit['_id'].to_s == record.id.to_s && hit['_type'] == record.class.name.to_s.downcase
+          hit['_id'].to_i == record.id.to_i && hit['_type'].downcase == record.class.name.to_s.downcase
         end
       end
     end

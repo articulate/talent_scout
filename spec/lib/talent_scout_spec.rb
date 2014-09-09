@@ -11,7 +11,7 @@ describe TalentScout do
     end
 
     it 'returns records from multiple models' do
-      response = TalentScout.search [Video, Music, Book], { query: { query_string: { query: "Adventure", default_operator: 'AND' } } }
+      response = TalentScout.search [Video.where("id IS NOT NULL"), Music, Book], { query: { query_string: { query: "Adventure", default_operator: 'AND' } } }
       expect(response.records).to include book
       expect(response.records).to include video
       expect(response.records).to_not include music

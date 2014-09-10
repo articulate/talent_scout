@@ -11,7 +11,7 @@ describe TalentScout do
     end
 
     it 'returns records from multiple models' do
-      response = TalentScout.search [Video.where("id IS NOT NULL"), Music, Book], { query: { query_string: { query: "Adventure", default_operator: 'AND' } } }
+      response = TalentScout.search [Video, Music, Book], { query: { query_string: { query: "Adventure", default_operator: 'AND' } } }
       expect(response.records).to include book
       expect(response.records).to include video
       expect(response.records).to_not include music
@@ -23,6 +23,11 @@ describe TalentScout do
       expect(response.response["hits"]["hits"].map { |hit| [hit['_type'].titleize, hit['_source']['id']] }).to eq [[video.class.name.to_s, video.id], [book.class.name, book.id]]
       # ensure the records are in the same order
       expect(response.records).to eq [video, book]
+    end
+
+    it 'allows you to pass an activerecord relation in' do
+      response = TalentScout.search [Video.where.not(id: video.id), Music, Book], { query: { query_string: { query: "Adventure", default_operator: 'AND' } } }
+      expect(response.records).to eq [book]
     end
   end
 end

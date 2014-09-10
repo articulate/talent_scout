@@ -8,7 +8,7 @@ module TalentScout
       end
 
       found_records = grouped_by_type.map do |klass_name, ids|
-        klass.find {|k| k.table_name.singularize == klass_name}.where(id: ids).to_a
+        klass.find {|k| k.table_name == klass_name.tableize}.where(id: ids).to_a
       end.compact.flatten
 
       # re-sort based on ES hit ordering

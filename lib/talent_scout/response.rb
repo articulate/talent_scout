@@ -8,7 +8,11 @@ module TalentScout
       end
 
       found_records = grouped_by_type.map do |klass_name, ids|
-        klass.find {|k| k.model.to_s.downcase == klass_name.downcase}.where(id: ids).to_a
+        model = klass.find do |k|
+          model_name = k.is_a?(ActiveRecord::Relation) ? k.model.to_s.downcase : k.to_s.downcase
+          model_name == klass_name.downcase
+        end
+        model.where(id: ids).to_a
       end.compact.flatten
 
       # re-sort based on ES hit ordering

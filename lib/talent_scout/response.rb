@@ -7,15 +7,15 @@ module TalentScout
         hash[result["_type"]] << result["_id"]
       end
 
-      found_records = grouped_by_type.map do |klass, ids|
-        klass.classify.constantize.where(id: ids).to_a
+      found_records = grouped_by_type.map do |klass_name, ids|
+        klass.find {|k| k.table_name == klass_name.tableize}.where(id: ids).to_a
       end.compact.flatten
 
       # re-sort based on ES hit ordering
       hits = response['hits']['hits']
       found_records.sort_by do |record|
         hits.index do |hit|
-          hit['_id'].to_i == record.id.to_i && hit['_type'] == record.class.name.to_s
+          hit['_id'].to_i == record.id.to_i && hit['_type'].downcase == record.class.name.to_s.downcase
         end
       end
     end

@@ -24,5 +24,10 @@ describe TalentScout do
       # ensure the records are in the same order
       expect(response.records).to eq [video, book]
     end
+
+    it 'allows you to pass an activerecord relation in' do
+      response = TalentScout.search [Video.where.not(id: video.id), Music, Book], { query: { query_string: { query: "Adventure", default_operator: 'AND' } } }
+      expect(response.records).to eq [book]
+    end
   end
 end
